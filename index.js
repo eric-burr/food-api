@@ -89,9 +89,9 @@ app.delete("/leads/:ID", (req, res) => {
 app.put('/update/:_ID', (req, res) =>{
  
 const body = req.body;
-  client_.connect(async err => {
+  client.connect(async err => {
     if (!err) {
-      const collection = client_.db("food").collection("users");
+      const collection = client.db("food").collection("users");
       // perform actions on the collection object
       const results = await collection.updateOne(
         { _id: ObjectId(req.params._ID) }, //lower case id matches db id. 
@@ -102,7 +102,7 @@ const body = req.body;
     } else {
       console.log(err);
     }
-    client_.close();
+    client.close();
   });
 })  
 
