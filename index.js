@@ -11,13 +11,14 @@ const cors = require('cors')
 app.use(express.json());
 app.use(cors());
 
-const db_url = "mongodb+srv://admin1:gFJjXly9Cif7eXPA@cluster0-iurxe.mongodb.net/ingredients?retryWrites=true&w=majority"
-const dbName = "ingredients"
-const db_urlTwo = "mongodb+srv://admin1:gFJjXly9Cif7eXPA@cluster0-iurxe.mongodb.net/users?retryWrites=true&w=majority"
+const db_url = "mongodb+srv://admin1:gFJjXly9Cif7eXPA@cluster0-iurxe.mongodb.net/"
+// const dbName = "ingredients"
+// const db_urlTwo = "mongodb+srv://admin1:gFJjXly9Cif7eXPA@cluster0-iurxe.mongodb.net/"
 
 
 const client = new MongoClient(db_url, { useNewUrlParser: true, useUnifiedTopology: true });
-const client_ = new MongoClient(db_urlTwo, { useNewUrlParser: true, useUnifiedTopology: true });
+// const client_ = new MongoClient(db_urlTwo, { useNewUrlParser: true, useUnifiedTopology: true });
+// referencing collection being used for crud
 
 
 // data is shown sent to database, and the remaing object is sent back
@@ -29,32 +30,32 @@ app.get('/', function(req, res) {
 })
 
 // getting users in database
-app.get('/users', (req, res) => {
-  client.connect (err => {
-    if (!err) {
+app.get('/users', (req, res) => {    //doesn't seem to matter if client or client_??? just have to match
+  client.connect (err => {                //what is the err placeholder?
+    if (!err) {        //if everything is working do this =>
       const collection = client.db("food").collection("users");
       // perform actions on the collection object
-      const results = collection.find({}).toArray((err, docs) => {
-        console.log(docs);
+      collection.find().toArray((err, docs) => { //i had a const results here, what would that have done? also there was {} in side the find() i got rid of it and it still works..why?
+        console.log("what is this", docs);
         res.send(docs);
       });
     } else {
       console.log(err);
     }
-    client.close();
+    client.close(); // what does close do? that is already done by either a ; or or res.send?
   });
 });
 
 //create users from form(home)
 
 app.post('/users', function(req, res) {
-  input = req.body
+  const input = req.body;
   console.log("coming in we have", input)
   client.connect(function(err, client_Two) {  //connecting to mongo server, client_two is referencing my account 
       // assert.equal(null, err);
       const db = client_Two.db("food"); //db("mydatabase that i want")
       insertOne(db, function(){
-          client_.close();
+          client.close();
       });
   });
   const insertOne = function(db, callback){
