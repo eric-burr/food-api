@@ -16,7 +16,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.0",
     "no": "0.0.1",
-    "nodemon": "^1.19.3",
+    "nodemon": "^1.19.4",
     "react-modal": "^3.10.1",
     "save": "^2.4.0"
   },

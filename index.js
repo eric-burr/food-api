@@ -36,7 +36,6 @@ app.get('/users', (req, res) => {    //doesn't seem to matter if client or clien
       const collection = client.db("food").collection("users");
       // perform actions on the collection object
       collection.find().toArray((err, docs) => { //i had a const results here, what would that have done? also there was {} in side the find() i got rid of it and it still works..why?
-        console.log("what is this", docs);
         res.send(docs);
       });
     } else {
@@ -48,25 +47,44 @@ app.get('/users', (req, res) => {    //doesn't seem to matter if client or clien
 
 //create users from form(home)
 
-app.post('/users', function(req, res) {
-  const input = req.body;
-  console.log("coming in we have", input)
-  client.connect(function(err, client_Two) {  //connecting to mongo server, client_two is referencing my account 
-      // assert.equal(null, err);
-      const db = client_Two.db("food"); //db("mydatabase that i want")
-      insertOne(db, function(){
-          client.close();
-      });
+app.post("/users", (req, res) => { //is the 'post' endpoint magically sending data to db?
+// console.log("theis is the req", req)
+  const body = req.body;
+   client.connect(async err => { // what is the placeholder param doing? took out the async function and it still works.
+    if(!err) {
+      const collection = client.db("food").collection("users"); //what is the collection? an object created
+      // console.log("the collection is", collection)
+      // perform actions on the collection object
+      const results = await collection.insertOne(body); // why is the await there? still works without?
+      console.log("the results are", results.insertedId)
+      res.send(results.insertedId);  //why only the id?
+    }else {
+      console.log("this is a big problem", err)
+    }
+    
+    client.close();
   });
-  const insertOne = function(db, callback){
-  const collection = db.collection('users'); 
-  collection.insertOne( input , function(err, result) {
-      callback(result);
-      res.send(result.ops)
-  });
-}
+});
+
+// app.post('/users', function(req, res) {
+//   const input = req.body;
+//   console.log("coming in we have", input)
+//   client.connect(function(err, client_Two) {  //connecting to mongo server, client_two is referencing my account 
+//       // assert.equal(null, err);
+//       const db = client_Two.db("food"); //db("mydatabase that i want")
+//       insertOne(db, function(){
+//           client.close();
+//       });
+//   });
+//   const insertOne = function(db, callback){
+//   const collection = db.collection('users'); 
+//   collection.insertOne( input , function(err, result) {
+//       callback(result);
+//       res.send(result.ops)
+//   });
+// }
  
-})
+// })
 
 //Delete a user
 
