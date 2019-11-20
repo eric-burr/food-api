@@ -204,6 +204,7 @@ app.get("/ingredients", (req, res) => {
         //i had a const results here, what would that have done? also there was {} in side the find() i got rid of it and it still works..why?
         console.log("what are docs", docs);
         const newDocs = docs[0].Ingredients
+        
         let newArr = [];
       newArr = Object.values(body);
       console.log("newArr", newArr);
