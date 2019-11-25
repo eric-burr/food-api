@@ -67,7 +67,8 @@ app.post("/users", (req, res) => {
     if (!err) {
       const collection = client.db("food").collection("users");
       // perform actions on the collection object
-      const results = await collection.insertOne(body);
+      await collection.insertOne(body); //putting payload into the db
+      console.log("this is the flag", body)
       res.send(body); //difference between responding with 'body' or 'results.insertedId'?
     } else {
       console.log("this is a big problem", err);
@@ -190,20 +191,21 @@ app.post("/pantry", (req, res) => {
 //   });
 // });
 
-app.get("/ingredients", (req, res) => {
+app.post("/ingredients", (req, res) => {
   const body = req.body;
+  console.log("what is the body", req.body)
   //doesn't seem to matter if client or client_??? just have to match
   client.connect(err => {
     //what is the err placeholder?
     if (!err) {
       //if everything is working do this =>
       const collection = client.db("food").collection("ingredients");
-      console.log("wahat is the collection", collection);
+      // console.log("wahat is the collection", collection);
       // perform actions on the collection object
       collection.find().toArray((err, docs) => {
         //i had a const results here, what would that have done? also there was {} in side the find() i got rid of it and it still works..why?
         console.log("what are docs", docs);
-        const newDocs = docs[0].Ingredients
+        const newDocs = docs[2].Ingredients
         
         let newArr = [];
       newArr = Object.values(body);
@@ -211,6 +213,7 @@ app.get("/ingredients", (req, res) => {
 
       const returnValue = newDocs.filter(item => !newArr.includes(item));
       console.log("returnValue", returnValue);
+      console.log("new docs are", newDocs)
 
         res.send(returnValue);
       });
