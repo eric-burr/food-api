@@ -190,10 +190,16 @@ app.post("/pantry", (req, res) => {
 //     client.close();
 //   });
 // });
+app.post("/recipe", (req, res) => {
+  const body = req.body;
+  console.log("what do you have", body)
+  res.send(body)
+})
+
 
 app.post("/ingredients", (req, res) => {
   const body = req.body;
-  console.log("what is the body", body)
+  // console.log("the body is", body)
   //doesn't seem to matter if client or client_??? just have to match
   client.connect(err => {
     //what is the err placeholder?
@@ -204,17 +210,16 @@ app.post("/ingredients", (req, res) => {
       // perform actions on the collection object
       collection.find().toArray((err, docs) => {
         //i had a const results here, what would that have done? also there was {} in side the find() i got rid of it and it still works..why?
-        console.log("what are docs", docs);
+        // console.log("what are docs", docs);
         const newDocs = docs[3].Ingredients //the selected recipe
-        
-        
         // let newArr = [];
       newArr = Object.values(body);
-      console.log("newArr", newArr);
-
+      // console.log("newArr", newArr);
+      const recipe = docs[0].Recipe
+      console.log("what is the", recipe)
       const returnValue = newDocs.filter(item => !newArr.includes(item));
-      console.log("returnValue", returnValue);
-      console.log("new docs are", newDocs)
+      // console.log("returnValue", returnValue);
+      // console.log("new docs are", newDocs)
 
         res.send(returnValue);
       });
