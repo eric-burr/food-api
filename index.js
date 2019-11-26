@@ -193,6 +193,23 @@ app.post("/pantry", (req, res) => {
 app.post("/recipe", (req, res) => {
   const body = req.body;
   console.log("what do you have", body)
+  client.connect(err => {
+    if(!err) {
+      const collection = client.db("food").collection("ingredients");
+      collection.find().toArray((err, docs) => {
+        console.log("tell me what the docxs are", docs)
+        const recipestuff = body["name"]
+        console.log("the chicken salad is", recipestuff)
+        
+        for(let i = 0; i < docs.length; i++){
+          if(recipestuff == docs[i].Recipe){
+            console.log("its working")
+          } 
+          console.log("not working")
+        }
+      })
+    }
+  })
   res.send(body)
 })
 
