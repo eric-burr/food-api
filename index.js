@@ -192,25 +192,49 @@ app.post("/pantry", (req, res) => {
 // });
 app.post("/recipe", (req, res) => {
   const body = req.body;
-  console.log("what do you have", body)
   client.connect(err => {
     if(!err) {
       const collection = client.db("food").collection("ingredients");
       collection.find().toArray((err, docs) => {
-        console.log("tell me what the docxs are", docs)
+        // console.log("tell me what the docxs are", docs)
         const recipestuff = body["name"]
-        console.log("the chicken salad is", recipestuff)
-        
-        for(let i = 0; i < docs.length; i++){
-          if(recipestuff == docs[i].Recipe){
-            console.log("its working")
-          } 
-          console.log("not working")
-        }
+        console.log("input value is", recipestuff)
+        docs.forEach((element, index, array) => { //iterating through all the recipes
+          console.log("the start", element.Ingredients)
+          let myRegex = new RegExp(recipestuff); //created new regex object (class)
+          console.log("what in the hell is this", myRegex)
+          let result = myRegex.test(element.Ingredients) //matching to each recipe in the foreach loop
+          console.log("the result we have is", result)
+          test = () => {
+            if(result==true){
+              console.log("may the force be with you", element)
+              
+              console.log('always', cheesecake)
+              return element
+            }
+          }
+          let cheesecake = element
+          console.log("the test is", test())
+          
+        })
+
+        // for(let i = 0; i < docs.length; i++){
+        //   console.log("each pass through", docs[4].Ingredients[i])
+        //   if(recipestuff == docs[1].Ingredients[i]){
+        //     console.log("this is your problem", docs[1].Ingredients[1])
+        //     console.log("the recipe is", docs[i]) //this is the recipe that needs to be returned to UI
+        //     console.log("the item that is being matched", docs[i].Ingredients[i])
+        //     var newStuff = docs[i].Ingredients
+        //     } 
+        //     // else {
+        //     //   docs[0]++
+        //     // }
+        //   console.log("not working")
+        // }
       })
     }
   })
-  res.send(body)
+  res.send(cheesecake)
 })
 
 
